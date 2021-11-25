@@ -1,5 +1,5 @@
 const yargs = require('yargs')
-const {getNotes} = require('./notes')
+const {getNotes,rmNote} = require('./notes')
 
 yargs.command({
     command: 'es',
@@ -18,6 +18,21 @@ yargs.command({
     },
     handler: function({title,body}){
         getNotes(title, body,'notes.json')
+    }
+})
+
+yargs.command({
+    command: 'rm',
+    describe:'remove',
+    builder:{
+        title:
+        {
+            description: 'the Title gonna be removed',
+            type: 'string'
+        }
+    },
+    handler: function({title}){
+        rmNote(title,'notes.json')
     }
 })
 

@@ -3,7 +3,7 @@ const fs = require('fs');
 const getNotes = function(title,body,fileName){
     const notes = loadNotes(fileName)
     const duplicates = notes.filter(note => note.title===title)
-    if(duplicates){
+    if(duplicates.length > 0){
         console.log(`the title ${title} is already taken`);
         return 
     }else{
@@ -15,7 +15,6 @@ const getNotes = function(title,body,fileName){
 const saveNotes = function(notes,fileName){
     const JSONdata = JSON.stringify(notes)
     fs.writeFileSync(fileName, JSONdata)
-    console.log(JSONdata)
 }
 
 const loadNotes = function(fileName){
@@ -28,6 +27,19 @@ const loadNotes = function(fileName){
     }
 }
 
+const rmNote = function(title,fileName){
+    const notes = loadNotes(fileName)
+    updatedNotes = notes.filter(note => note.title!==title)
+    if(updatedNotes.length===notes.length){
+        console.log(`${title} not found`)
+    }else{
+        console.log(`${title} removed`)
+        saveNotes(updatedNotes,fileName)
+    }
+}
+
 module.exports = {
-    getNotes: getNotes
+    getNotes: getNotes,
+    rmNote: rmNote
+
 }
