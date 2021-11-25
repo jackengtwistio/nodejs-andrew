@@ -1,9 +1,26 @@
 const fs = require('fs');
 
-const getNotes = function(title,body,fileName){
+const readNotes = function(title,fileName){
     const notes = loadNotes(fileName)
-    const duplicates = notes.filter(note => note.title===title)
-    if(duplicates.length > 0){
+    if(title===undefined) {
+        notes.forEach(note => {
+            console.log(`title: ${note.title}, body: ${note.body}`)
+        })
+    }
+    if(title){
+        correspondNote = notes.find(note => note.title === title)
+        if(correspondNote){
+            console.log(`corresponded note is: ${correspondNote.body}`)
+        }else{
+            console.log(`${title} can not be found`)
+        }
+    }
+}
+
+const addNotes = function(title,body,fileName){
+    const notes = loadNotes(fileName)
+    const duplicates = notes.find(note => note.title===title)
+    if(duplicates){
         console.log(`the title ${title} is already taken`);
         return 
     }else{
@@ -39,7 +56,6 @@ const rmNote = function(title,fileName){
 }
 
 module.exports = {
-    getNotes: getNotes,
-    rmNote: rmNote
-
-}
+    addNotes,
+    rmNote,
+    readNotes}

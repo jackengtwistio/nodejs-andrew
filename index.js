@@ -1,5 +1,5 @@
 const yargs = require('yargs')
-const {getNotes,rmNote} = require('./notes')
+const {addNotes,rmNote, readNotes} = require('./notes')
 
 yargs.command({
     command: 'es',
@@ -17,7 +17,7 @@ yargs.command({
         }
     },
     handler: function({title,body}){
-        getNotes(title, body,'notes.json')
+        addNotes(title, body,'notes.json')
     }
 })
 
@@ -33,6 +33,21 @@ yargs.command({
     },
     handler: function({title}){
         rmNote(title,'notes.json')
+    }
+})
+
+yargs.command({
+    command: 'read',
+    describe:'read one note or all notes',
+    builder:{
+        title:
+        {
+            description: 'the Title you are looking for',
+            type: 'string'
+        }
+    },
+    handler: function({title}){
+        readNotes(title,'notes.json')
     }
 })
 
