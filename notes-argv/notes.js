@@ -2,6 +2,7 @@ const fs = require('fs');
 
 const readNotes = function(title,fileName){
     const notes = loadNotes(fileName)
+    debugger
     if(title===undefined) {
         notes.forEach(note => {
             console.log(`title: ${note.title}, body: ${note.body}`)

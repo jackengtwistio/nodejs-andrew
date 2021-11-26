@@ -1,23 +1,25 @@
 const yargs = require('yargs')
 const {addNotes,rmNote, readNotes} = require('./notes')
 
+fileName = 'notes.json'
+
 yargs.command({
-    command: 'es',
-    describe:'spanish',
+    command: 'add',
+    describe:'add note',
     builder:{
         title:{
-            description: 'oneTitle',
+            description: 'the Title gonna be added',
             demandOption: true,
             type: 'string'
         },
         body:{
-            description: 'oneBody',
+            description: 'corresponded Body',
             demandOption: true,
             type: 'string'
         }
     },
     handler: function({title,body}){
-        addNotes(title, body,'notes.json')
+        addNotes(title, body,fileName)
     }
 })
 
@@ -32,7 +34,7 @@ yargs.command({
         }
     },
     handler: function({title}){
-        rmNote(title,'notes.json')
+        rmNote(title,fileName)
     }
 })
 
@@ -47,7 +49,7 @@ yargs.command({
         }
     },
     handler: function({title}){
-        readNotes(title,'notes.json')
+        readNotes(title,fileName)
     }
 })
 
