@@ -35,8 +35,7 @@ app.get("/weather", (req, res) => {
         } else {
           res.render("weather", {
             weatherObj,
-            forecast: "forecast",
-            location: location,
+            location
           });
         }
       });
