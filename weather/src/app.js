@@ -4,7 +4,7 @@ const hbs = require("hbs");
 const getWeather = require("./utils/getWeather");
 const geoCode = require("./utils/geoCode");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const viewPath = path.join(__dirname, "../public/views");
 const partialPath = path.join(__dirname, "../public/partials");
@@ -23,9 +23,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/weather", (req, res) => {
+  if (!req.query.location) {
+    return res.send({
+        error: 'You must provide a location!'
+    })
+  }
+
   let location = req.query.location;
   const weatherBody = geoCode(location, (error, response) => {
-    const { lat, lon } = response;
+    const { lat, lon, cityName } = response;
     if (error) {
       return console.log(`error: ${error}`);
     } else {
@@ -33,14 +39,16 @@ app.get("/weather", (req, res) => {
         if (error) {
           return res.send(error);
         } else {
-          res.render("weather", {
+          res.send({
             weatherObj,
-            location
+            location,
+            cityName
           });
         }
       });
     }
   });
+
   if (location) {
     weatherBody;
   } else {
