@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const taskSchema = new mongoose.Schema({
     title: {
         type: 'string',
         required: true
@@ -13,12 +13,12 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-userSchema.pre('save',async function(next){
+taskSchema.pre('save',async function(next){
     const user = this
-    console.log('before save')
+    console.log('before save task')
     next()
 })
 
-const Task = mongoose.model('Task',userSchema)
+const Task = mongoose.model('Task',taskSchema)
 
 module.exports = Task

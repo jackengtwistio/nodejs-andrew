@@ -1,23 +1,29 @@
-async function handlePatch(req,res,queryString,model){
+async function handlePatch(req,res,queryString,model) {
     const prop = req.params[queryString]
     const updates = req.body
     const updatesKeys = Object.keys(updates)
+    
+    if(!updatesKeys.every(key=>Object.keys(model.schema.tree).includes(key))){
+        return res.status(400).send(`you can only add ${model.allowedProps}`)
+    }
     async function response(){
-        const result = await model.findOneAndUpdate(
-            {[queryString]:prop},
-            {...updates},
-            {new: true, runValidators: true}
-            )
-        if(!result){return res.send(`can't find ${req.params.prop}`)}
-        res.send(result)
+        const results = await model.findOne({[queryString]:prop})
+        if(!results){return res.send(`can't find ${req.params.prop}`)}
+        updatesKeys.forEach(updatekey =>results[updatekey]=updates[updatekey])
+        await results.save()
+        console.log(results)
+        // const result = await model.findOneAndUpdate(
+        //     {[queryString]:prop},
+        //     {...updates},
+        //     {new: true, runValidators: true}
+        //     )
+        res.send(results)
     }
     try{
-        updatesKeys.every(key=>model.allowedProps.includes(key))?
-            response() : 
-            res.status(400).send(`you can only add ${model.allowedProps}`)
-        }catch{
-            res.status(500).send('server is down')
-        }
+        response() 
+    }catch{ 
+        res.status(500).send('server is down')
+    }
 }
 
 
